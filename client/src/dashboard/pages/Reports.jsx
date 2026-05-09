@@ -57,10 +57,7 @@ export default function Reports() {
   const maxHourly = Math.max(...hourlyData.map(h => h.orders), 1);
 
   // ── Payment breakdown ──
-  const onlineOrders = orders.filter(o => o.paymentMethod === 'online' || !o.paymentMethod).length;
-  const cashOrders   = orders.filter(o => o.paymentMethod === 'cash').length;
-  const walletOrders = orders.filter(o => o.paymentMethod === 'wallet').length;
-  const total        = orders.length || 1;
+
 
   const SUMMARY = [
     { label:"Total orders",     value: stats.totalOrders,              change: '', up: true  },

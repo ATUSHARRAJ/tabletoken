@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import { getMyRestaurant, updateRestaurant } from '../../api/restaurants';
 
 const DAY_LABELS = {
@@ -18,7 +17,6 @@ const DEFAULT_HOURS = {
 };
 
 export default function Settings() {
-  const { user }                    = useAuth();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading]       = useState(true);
   const [saving, setSaving]         = useState('');
