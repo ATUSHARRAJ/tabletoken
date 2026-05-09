@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CartSidebar from '../components/CartSidebar';
@@ -12,12 +12,11 @@ export default function Menu() {
   const [loading, setLoading]       = useState(true);
   const navigate                    = useNavigate();
 
-  useEffect(() => {
-    if (!restaurantInfo?._id) { navigate('/restaurants'); return; }
-    fetchMenu();
-  }, [restaurantInfo]);
-
-  const fetchMenu = async () => {
+  const fetchMenu = useCallback(async () => {
+    if (!restaurantInfo?._id) {
+      navigate('/restaurants');
+      return;
+    }
     try {
       const res   = await getMenuItems(restaurantInfo._id);
       const items = res.data.data;
@@ -29,7 +28,11 @@ export default function Menu() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [restaurantInfo, navigate]);
+
+  useEffect(() => {
+    fetchMenu();
+  }, [fetchMenu]);
 
   const currentCat = activeCategory || menuData.categories[0];
 
@@ -82,8 +85,7 @@ export default function Menu() {
           {/* Group Order button */}
           <button
             onClick={() => navigate('/group/create', { state: { restaurant: restaurantInfo } })}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 rounded-xl text-sm font-medium transition-colors"
-          >
+            className="flex items-center gap-2 px-4 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-700 rounded-xl text-sm font-medium transition-colors">
             👥 Group Order
           </button>
 

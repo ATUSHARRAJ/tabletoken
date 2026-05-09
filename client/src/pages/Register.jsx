@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { registerUser } from '../api/auth';
 
 export default function Register() {
-  const [form, setForm] = useState({ firstName: '', lastName: '', phone: '', email: '', password: '', confirmPassword: '' });
+  const [form, setForm] = useState({
+    firstName: '', lastName: '', phone: '', email: '', password: '', confirmPassword: '',
+  });
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
-  const { login }             = useAuth();
   const navigate              = useNavigate();
 
   const handleChange = (e) =>
@@ -26,7 +26,6 @@ export default function Register() {
         email:    form.email,
         password: form.password,
       });
-      // Don't login yet — redirect to check email page
       navigate('/check-email', { state: { email: form.email } });
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

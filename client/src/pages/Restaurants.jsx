@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { getAllRestaurants } from '../api/restaurants';
@@ -15,11 +15,7 @@ export default function Restaurants() {
   const { setRestaurant, clearCart }  = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchRestaurants();
-  }, [activecat, vegOnly]);
-
-  const fetchRestaurants = async () => {
+  const fetchRestaurants = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -33,7 +29,11 @@ export default function Restaurants() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activecat, vegOnly, search]);
+
+  useEffect(() => {
+    fetchRestaurants();
+  }, [fetchRestaurants]);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
