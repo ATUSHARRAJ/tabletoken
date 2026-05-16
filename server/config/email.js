@@ -1,11 +1,10 @@
 const Brevo = require('@getbrevo/brevo');
 
-// Brevo API Client Setup
-const defaultClient = Brevo.ApiClient.instance;
-const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY; // Render Variables me 'BREVO_API_KEY' naam se key daal dena
-
+// LATEST BREVO VERSION CONFIGURATION
 const apiInstance = new Brevo.TransactionalEmailsApi();
+
+// API Key directly configure karein (No 'instance' required)
+apiInstance.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 
 // 1. Email Verification Function
 const sendVerificationEmail = async (email, name, token) => {
@@ -16,7 +15,7 @@ const sendVerificationEmail = async (email, name, token) => {
   sendSmtpEmail.subject = 'Verify your TableToken account';
   sendSmtpEmail.sender = { 
     name: "TableToken", 
-    email: process.env.EMAIL_FROM // Yeh email Brevo dashboard me verified hona chahiye
+    email: process.env.EMAIL_FROM 
   };
   sendSmtpEmail.to = [{ email: email, name: name }];
   sendSmtpEmail.htmlContent = `
