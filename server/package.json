@@ -22,7 +22,8 @@
     "nodemailer": "^8.0.7",
     "socket.io": "^4.8.3",
     "web-push": "^3.6.7",
-    "resend": "^3.2.0"
+    "resend": "^3.2.0",
+    "@getbrevo/brevo": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
