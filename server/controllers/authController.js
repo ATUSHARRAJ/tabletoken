@@ -55,16 +55,16 @@ exports.register = async (req, res, next) => {
     });
 
     // Send verification email
-    try {
-      await sendVerificationEmail(email, name, verificationToken);
-    } catch (emailErr) {
-      console.error('Email send failed:', emailErr.message);
-    }
-
+   // Pehle response bhejo
     res.status(201).json({
       success: true,
       message: 'Account created! Please check your email to verify your account.',
     });
+
+    // Email background mein bhejo
+    sendVerificationEmail(email, name, verificationToken)
+      .catch(emailErr => console.error('Email send failed:', emailErr.message));
+
   } catch (error) {
     next(error);
   }
