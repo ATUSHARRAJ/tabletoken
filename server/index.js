@@ -67,7 +67,9 @@ app.use('/api/menu',        require('./routes/menu'));
 app.use('/api/orders',      require('./routes/orders'));
 app.use('/api/upload',      require('./routes/upload'));
 app.use('/api/group-orders', require('./routes/groupOrders'));
-app.use()
+const { router: pushRouter } = require('./routes/push');
+app.use('/api/push',        pushRouter);
+
 
 // Health check
 app.get('/api/health', (req, res) => {
