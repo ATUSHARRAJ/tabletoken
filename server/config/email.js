@@ -1,22 +1,21 @@
 const Brevo = require('@getbrevo/brevo');
 
-// LATEST BREVO VERSION CONFIGURATION
 const apiInstance = new Brevo.TransactionalEmailsApi();
-
-// API Key directly configure karein (No 'instance' required)
 apiInstance.setApiKey(Brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 
 // 1. Email Verification Function
 const sendVerificationEmail = async (email, name, token) => {
   const verifyUrl = `${process.env.CLIENT_URL}/verify-email/${token}`;
-  
   const sendSmtpEmail = new Brevo.SendSmtpEmail();
   
   sendSmtpEmail.subject = 'Verify your TableToken account';
+  
+  // Gmail ke liye sabse safe format: direct object mapping
   sendSmtpEmail.sender = { 
     name: "TableToken", 
-    email: process.env.EMAIL_FROM 
+    email: process.env.EMAIL_FROM.trim() // Trim lagaya taaki koi extra space na rahe
   };
+  
   sendSmtpEmail.to = [{ email: email, name: name }];
   sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
@@ -38,9 +37,9 @@ const sendVerificationEmail = async (email, name, token) => {
 
   try {
     await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log(`Verification email sent to ${email}`);
+    console.log(`Verification email sent successfully to ${email}`);
   } catch (error) {
-    console.error("Brevo API Error (Verification):", error);
+    console.error("Brevo API Error Details:", error.response ? error.response.body : error);
     throw error;
   }
 };
@@ -48,14 +47,14 @@ const sendVerificationEmail = async (email, name, token) => {
 // 2. Forgot Password Function
 const sendForgotPasswordEmail = async (email, name, token) => {
   const resetUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
-  
   const sendSmtpEmail = new Brevo.SendSmtpEmail();
   
   sendSmtpEmail.subject = 'Reset your TableToken password';
   sendSmtpEmail.sender = { 
     name: "TableToken", 
-    email: process.env.EMAIL_FROM 
+    email: process.env.EMAIL_FROM.trim() 
   };
+  
   sendSmtpEmail.to = [{ email: email, name: name }];
   sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
@@ -76,9 +75,9 @@ const sendForgotPasswordEmail = async (email, name, token) => {
 
   try {
     await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log(`Password reset email sent to ${email}`);
+    console.log(`Password reset email sent successfully to ${email}`);
   } catch (error) {
-    console.error("Brevo API Error (Forgot Password):", error);
+    console.error("Brevo API Error Details:", error.response ? error.response.body : error);
     throw error;
   }
 };
