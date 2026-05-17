@@ -13,9 +13,15 @@ const app    = express();
 const server = http.createServer(app);
 
 // ── Socket.io setup ─────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://tabletoken-seven.vercel.app',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin:  process.env.CLIENT_URL || 'http://localhost:3000',
+    origin:  allowedOrigins,
     methods: ['GET', 'POST'],
   },
 });
@@ -45,7 +51,7 @@ io.on('connection', (socket) => {
 
 // ── Middleware ──────────────────────────────────────
 app.use(cors({
-  origin:      process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json());
