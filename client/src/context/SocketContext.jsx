@@ -87,7 +87,7 @@ export function SocketProvider({ children }) {
   return (
     <SocketContext.Provider value={{ socket }}>
       {children}
-    </td>
+    </SocketContext.Provider> // <-- Yahan pehle </td> ho gaya tha, ise aise sahi kar lo
   );
 }
 
