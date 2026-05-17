@@ -11,9 +11,9 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!isLoggedIn) return;
 
-    const newSocket = io('http://localhost:5000', {
-      transports: ['websocket'],
-    });
+   const newSocket = io(process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000', {
+  transports: ['websocket'],
+});
 
     newSocket.on('connect', () => {
       console.log('🔌 Socket connected:', newSocket.id);
